@@ -36,4 +36,19 @@ describe('Metrics', function () {
     })
   })
 
+  //Test db#getTest run for 1000
+  describe('#getTest', function () {
+    it('should get empty array on non existing group', function (done) {
+      //the test of 'get'
+      setTimeout( () =>{
+        dbMet.get("0", function (err: Error | null, result?: Metric[]) { //0 is a value that we put into database
+          expect(err).to.be.null
+          expect(result).to.not.be.undefined
+          expect(result).to.be.empty
+          done()
+        })
+      }, 1000 )
+    })
+  })
+
 })

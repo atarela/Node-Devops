@@ -1,13 +1,14 @@
+<!--ACCOUNT PAGE LAYOUT-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <% include partials/head %>
+    <% include partials/head %>
       <title>Account</title>
         <link rel="stylesheet" href="/assets/semantic/semantic.min.css">
         <style>
         .main.container{
             margin-top: 7em;
-            margin-left: 40%;
+            width: 50%;
         }
         .btn-danger{
           position: absolute;
@@ -24,13 +25,36 @@
       </button>
     </div>
     <br/>
-    <div class="col-md-6 col-md-offset-3">
+    <center>
+    <cent    </center class="col-md-6 col-md-offset-3">
       <h1>Hello <%= name %></h1>
       <button class="btn btn-success" id="show-metrics">
         Bring the metrics
       </button>
       <div id="metrics"></div>
-    </div>
+
+    <div id="form" class="ui main container">
+        <h2>Add a new metric</h2>
+        <form action="/metrics/:id" method="post" class="ui form">
+          <br/>
+          <div class="form-group">
+            <label for="form_timestamp"><b>Timestamp</b></label>
+            <input id="form_timestamp" type="text" name="timestamp" />
+          </div>
+          <br/>
+          <div class="form-group">
+            <label for="form_value"><b>Value</b></label>
+            <input id="form_value" type="number" name="value" />
+          </div>
+          <br/>
+          <button class="ui orange labeled submit icon button" type="submit" name="Add" value="Add">
+              <i class="edit outline icon"></i>Add 
+          </button>
+        </form>
+
+      </div>
+    </center>
+
     <script>
       $('#show-metrics').click((e) => {
         e.preventDefault();
