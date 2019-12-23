@@ -109,6 +109,24 @@ export class MetricsHandler {
       })
     }
   
-  //delete function
+  //delete function (A RETOUCHE POUR QUE CA SUPPRIME)
     //use method from levelDB called del(to delete for that search del function on inet)
+    public delete(key: string, callback: (err: Error | null, result?: Metric[]) => void) {
+      const stream = this.db.createReadStream()
+      var met: Metric[] = []
+      
+      stream.on('error', callback)
+        .on('data', (data: any) => {
+          const [_, k, timestamp] = data.key.split(":")
+          const value = data.value
+          if (key != k) {
+            console.log(`LevelDB error: ${data} does not match key ${key}`)
+          } else {
+            met.push(new Metric(timestamp, value))
+          }
+        })
+        .on('end', (err: Error) => {
+          callback(null, met)
+        })
+    }
 }

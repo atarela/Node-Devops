@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <% include partials/head %>
+      <title>Account</title>
+        <link rel="stylesheet" href="/assets/semantic/semantic.min.css">
+        <style>
+        .main.container{
+            margin-top: 7em;
+            margin-left: 40%;
+        }
+        .btn-danger{
+          position: absolute;
+          right: 0px;
+          padding: 9px;
+        }
+        </style>
+  </head>
+  <body class="main container">
+    <div class="ui fixed inverted menu">
+      <a href="/" class="header item">Home</a>
+      <button class="btn btn-danger" href="/" onClick='document.location.href="/"'>
+        Logout
+      </button>
+    </div>
+    <br/>
+    <div class="col-md-6 col-md-offset-3">
+      <h1>Hello <%= name %></h1>
+      <button class="btn btn-success" id="show-metrics">
+        Bring the metrics
+      </button>
+      <div id="metrics"></div>
+    </div>
+    <script>
+      $('#show-metrics').click((e) => {
+        e.preventDefault();
+        $.getJSON("/metrics.json", {}, (data) => {
+          const content = data.map(d => {
+            return 'timestamp: '+d.timestamp+', value: '+d.value+'';
+          })
+          $('#metrics').append(content.join("\n"));
+        });
+      })
+    </script>
+  </body>
+</html>

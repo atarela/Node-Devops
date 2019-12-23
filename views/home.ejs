@@ -1,0 +1,35 @@
+<!--HOME PAGE LAYOUT-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+        <link rel="stylesheet" href="/assets/semantic/semantic.min.css">
+        <style>
+        .main.container{
+            margin-top: 7em;
+            width: 40%;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="ui fixed inverted menu">
+            <a href="/" class="header item">Home</a>
+        </div>
+        <div>
+            <center>
+                <br/><br/><br/>
+                <h1>Welcome to the Home Page</h1>
+                <br/>
+                <h3>Connect to your account by clicking on the button below</h3>
+                <button class="ui green labeled submit icon button" type="submit" href="/login" onClick='document.location.href="/login"'>
+                    <i class="check icon"></i>Connect to my account
+                </button>
+                <br/><br/><br/>
+                <h3>You still don't have an account? Sign up !</h3>
+                <button class="ui orange labeled submit icon button" type="submit" href="/signup" onClick='document.location.href="/signup"'>
+                    <i class="edit outline icon"></i>Create an account
+                </button>
+            </center>
+        </div>
+    </body>
+</html>

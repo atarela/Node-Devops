@@ -1,0 +1,51 @@
+<!--SIGNUP PAGE LAYOUT-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sign Up</title>
+        <link rel="stylesheet" href="/assets/semantic/semantic.min.css">
+        <style>
+        .main.container{
+            margin-top: 7em;
+            width: 40%;
+        }
+        </style>
+    </head>
+    <body>
+      <div class="ui fixed inverted menu">
+        <a href="/" class="header item">Home</a>
+      </div>
+      <div id="form" class="ui main container">
+        <center>
+          <h2>Please register here</h2>
+          <br/>
+          <form action="/signup" method="post" class="ui form">
+            <br/>
+            <div class="form-group">
+              <label for="form_username"><b>Username</b></label>
+              <input id="form_username" type="text" name="username" />
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="form_email"><b>Email</b></label>
+              <input id="form_email" type="text" name="email" />
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="form_password"><b>Password</b></label>
+              <input id="form_password" type="password" name="password" />
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="form_password2"><b>Confirm password</b></label>
+              <input id="form_password2" type="password" name="password2" />
+            </div>
+            <br/><br/>
+            <button class="ui green labeled submit icon button" type="submit" name="Submit" value="Submit">
+                <i class="edit outline icon"></i>Sign Up
+            </button>
+          </form>
+        </center>
+      </div>
+  </body>
+</html>

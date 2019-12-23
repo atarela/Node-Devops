@@ -1,21 +1,45 @@
 <!--LOGIN PAGE LAYOUT-->
-
-<div id="form">
-    <p>Please login to your account</p>
-    <hr/>
-    <form action="/login" method="post">
-      <div class="form-group">
-        <label for="form_username">Username</label>
-        <input id="form_username" type="text" name="username" />
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="/assets/semantic/semantic.min.css">
+        <style>
+        .main.container{
+            margin-top: 7em;
+            width: 40%;
+        }
+        </style>
+    </head>
+    <body>
+      <div class="ui fixed inverted menu">
+        <a href="/" class="header item">Home</a>
       </div>
-      <div class="form-group">
-        <label for="form_password">Password</label>
-        <input id="form_password" type="password" name="password" />
+      <div id="form" class="ui main container">
+        <center>
+          <h2>Please login to your account</h2>
+          <br/>
+          <form action="/login" method="post" class="ui form">
+            <br/>
+            <div class="form-group">
+              <label for="form_username"><b>Username</b></label>
+              <input id="form_username" type="text" name="username" />
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="form_password"><b>Password</b></label>
+              <input id="form_password" type="password" name="password" />
+            </div>
+            <br/>
+            <button class="ui green labeled submit icon button" type="submit" name="Submit" value="Submit"><i class="check icon"></i>Connect</button>
+            <br/><br/>
+          </form>
+          <hr/>
+          <p><b>Still no account?  Sign up !</b></p>
+          <button class="ui orange labeled submit icon button"  type="submit" href="/signup" onClick='document.location.href="/signup"'>
+            <i class="edit outline icon"></i>Create an account
+          </button>
+        </center>
       </div>
-      <button class="btn btn-primary btn-block" type="submit" value="Submit">Connect</button>
-    </form>
-    <hr/>
-    <button class="btn btn-success btn-block" type="submit" href="/signup" onClick='document.location.href="/signup"'>
-      Create an account
-    </button>
-  </div>
+  </body>
+</html>

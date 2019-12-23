@@ -1,10 +1,27 @@
 import express = require('express')
-import { MetricsHandler } from './metrics'
+import { MetricsHandler, Metric } from './metrics'
 import path = require('path')
 import bodyparser = require('body-parser')
 import session = require('express-session')
 import levelSession = require('level-session-store')
 import { UserHandler, User } from './users'
+
+/*
+const u: User = new User('regina', 'r@ece.fr', 'regi', false)
+const dbUser2: UserHandler = new UserHandler('./db/users')
+dbUser2.save(u, function(err: Error | null){
+  console.log(u.getPassword)
+})
+
+dbUser2.get('john', function(err: Error | null){
+  console.log(u.email)
+})
+
+dbUser2.delete('john', function(err: Error | null){
+  console.log(u.username)
+})
+*/
+
 
 
 
@@ -17,21 +34,26 @@ const dbUser: UserHandler = new UserHandler('./db/users')
 const authRouter = express.Router()
 const userRouter = express.Router()
 
-app.use(express.static(path.join(__dirname, '/../public')))
 
 app.set('views', __dirname + "/../views")
 app.set('view engine', 'ejs');
 
+
+//Middleware
+//"/assets" retrives static files inside public folder
+app.use('/assets', express.static('public'))
+
+app.use(express.static(path.join(__dirname, '/../public')))
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded())
 
+//Routes
 app.get('/', (req: any, res: any) => {
-  res.write('Hello world')
-  res.end()
+  res.render('home.ejs')
 })
 
-app.get('/hello/:name', (req: any, res: any) => {
-  res.render('index.ejs', {name: req.params.name})
+app.get('/account/:name', (req: any, res: any) => {
+  res.render('account.ejs', {name: req.params.name})
 })
 
 const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
@@ -48,6 +70,7 @@ app.get('/metrics/', (req: any, res: any) => {
   dbMet.getAll(
     (err: Error | null, result: any) => {
     if (err) throw err
+    console.log(res)
     res.status(200).send(result)
   }
   )
@@ -94,7 +117,7 @@ app.post('/login', (req: any, res: any, next: any) => {
     else {
       req.session.loggedIn = true
       req.session.user = result
-      res.redirect('/')
+      res.redirect('/account/:name', {name: req.session.username})
     }
   })
 })
@@ -135,5 +158,5 @@ const authCheck = function (req: any, res: any, next: any) {
 }
 
 app.get('/', authCheck, (req: any, res: any) => {
-  res.render('index', { name: req.session.username })
+  res.render('account', { name: req.session.username })
 })

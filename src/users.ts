@@ -1,5 +1,6 @@
 import { LevelDB } from "./leveldb"
 import WriteStream from 'level-ws'
+let passwordHash = require('password-hash');
 
 //User CRUD (Create Read Update Delete) I
 export class User {
@@ -15,6 +16,7 @@ export class User {
         this.setPassword(password)
     } 
     else this.password = password
+
     }
 
     static fromDb(username: string, value: any): User {
@@ -23,7 +25,10 @@ export class User {
     }
     
     public setPassword(toSet: string): void {
-    // Hash and set password
+      // Hash and set password
+      this.password = toSet
+      passwordHash.generate(this.password)
+      passwordHash = true
     }
 
     public getPassword(): string {
@@ -33,7 +38,7 @@ export class User {
     public validatePassword(toValidate: String): boolean {
     // return comparison with hashed password
     // if... else...
-    if (toValidate) return true
+    if (toValidate === this.password) return true
     else return false
     }
 }
@@ -57,7 +62,9 @@ export class UserHandler {
   }
 
   public delete(username: string, callback: (err: Error | null) => void) {
-    // TODO
+    this.db.delete(`user:${username}`, (err: Error | null) => {
+      callback(err)
+    })
   }
 
   constructor(path: string) {
