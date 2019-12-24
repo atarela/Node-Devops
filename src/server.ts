@@ -1,62 +1,65 @@
+//Import ExpressJS
 import express = require('express')
-import { MetricsHandler, Metric } from './metrics'
 import path = require('path')
 import bodyparser = require('body-parser')
 import session = require('express-session')
 import levelSession = require('level-session-store')
+//Import classes
+import { MetricsHandler, Metric } from './metrics'
 import { UserHandler, User } from './users'
 
+//Defining port number
 const port: string = process.env.PORT || '8082'
-
 const LevelStore = levelSession(session)
+// Set express as Node.js web application server framework.
 const app = express()
-
 const dbUser: UserHandler = new UserHandler('./db/users')
+const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
 const authRouter = express.Router()
 const userRouter = express.Router()
 
-
 app.set('views', __dirname + "/../views")
+// Set EJS as templating engine 
 app.set('view engine', 'ejs');
-
 
 //Middleware
 //"/assets" retrives static files inside public folder
 app.use('/assets', express.static('public'))
-
 app.use(express.static(path.join(__dirname, '/../public')))
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded())
 
-//Routes
+//ROUTES
+//Home page
 app.get('/', (req: any, res: any) => {
   res.render('home.ejs')
 })
 
+//User Account page
 app.get('/account/:name', (req: any, res: any) => {
-  res.render('account.ejs', {name: req.params.name})
-})
-
-const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
-
-app.post('/metrics/:id', (req: any, res: any) => {
-  dbMet.save(req.params.id, req.body, (err: Error | null) => {
+  dbMet.getAll(
+    (err: Error | null, result: any) => {
     if (err) throw err
-    res.status(200).send('ok')
+    console.log(res)
+    //res.status(200).send(result)
+  
+    var data = {name: req.params.name, 
+                metrics: result} 
+    res.render('account.ejs', {data:data})
   })
 })
 
-//for get function
+//Get a metric
 app.get('/metrics/', (req: any, res: any) => {
   dbMet.getAll(
     (err: Error | null, result: any) => {
     if (err) throw err
     console.log(res)
     res.status(200).send(result)
-  }
-  )
+  })
 })
 
+//Listening to port
 app.listen(port, (err: Error) => {
   if (err) {
     throw err
@@ -72,7 +75,6 @@ app.use(session({
   saveUninitialized: true
 }))
 
-
 //User Authentification
 authRouter.get('/login', (req: any, res: any) => {
   res.render('login')
@@ -85,11 +87,6 @@ authRouter.get('/signup', (req: any, res: any) => {
 authRouter.get('/account/:name', (req: any, res: any) => {
   res.render('account.ejs', {name: req.params.name})
 })
-/*
-authRouter.get('/account', (req: any, res: any) => {
-  res.render('account')
-})
-*/
 
 authRouter.get('/logout', (req: any, res: any) => {
   delete req.session.loggedIn
@@ -97,6 +94,7 @@ authRouter.get('/logout', (req: any, res: any) => {
   res.redirect('/login')
 })
 
+//POSTS
 //Signing up (saving the new user in db)
 app.post('/signup', (req: any, res: any, next: any) => {
   //Display username
@@ -130,6 +128,29 @@ app.post('/login', (req: any, res: any, next: any) => {
     }
   })
 })
+
+//Adding a metric (saving the new metric in db)
+app.post('/metric', (req: any, res: any, next: any) => {
+  //Display username
+  console.log(req.body.username);
+  dbMet.get(req.body.timestamp, function (err: Error | null, result?: Metric[]) {
+    let metric = new Metric(req.params.name,req.body.timestamp,req.body.value);
+    result = [metric]
+    dbMet.save(req.body.timestamp, result, function (err: Error | null) {
+      if (err) next(err)
+      else res.redirect('/account/:name')
+    })
+  })
+})
+
+/* Adding metric (function of the course)
+app.post('/metrics/:id', (req: any, res: any) => {
+  dbMet.save(req.params.id, req.body, (err: Error | null) => {
+    if (err) throw err
+    res.status(200).send()
+  })
+})
+*/
 
 app.use(authRouter)
 

@@ -32,9 +32,7 @@ export class User {
       //Generating hashed password
       let hashedPassword = passwordHash.generate(password)
       this.password = hashedPassword
-      console.log("Test\n passhashed: " + this.password)
       this.isHashed = true
-      console.log(hashedPassword)
       console.log(passwordHash.verify(password, hashedPassword)); // true
     }
 
@@ -54,6 +52,10 @@ export class User {
 //User CRUD II
 export class UserHandler {
   public db: any
+
+  constructor(path: string) {
+    this.db = LevelDB.open(path)
+  }
 
   public get(username: string, callback: (err: Error | null, result?: User) => void) {
     this.db.get(`user:${username}`, function (err: Error, data: any) {
@@ -75,7 +77,4 @@ export class UserHandler {
     })
   }
 
-  constructor(path: string) {
-    this.db = LevelDB.open(path)
-  }
 }

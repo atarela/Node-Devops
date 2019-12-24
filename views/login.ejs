@@ -2,8 +2,11 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
         <title>Login</title>
+        <!-- Semantic UI usage-->
         <link rel="stylesheet" href="/assets/semantic/semantic.min.css">
+        <!-- CSS stylesheet -->
         <style>
         .main.container{
             margin-top: 7em;
@@ -11,10 +14,14 @@
         }
         </style>
     </head>
+
     <body>
+      <!--Header-->
       <div class="ui fixed inverted menu">
         <a href="/" class="header item">Home</a>
       </div>
+      <!--Body-->
+      <!--Login Form-->
       <div id="form" class="ui main container">
         <center>
           <h2>Please login to your account</h2>
@@ -35,11 +42,13 @@
             <br/><br/>
           </form>
           <hr/>
+          <!--Suggestion to sign up-->
           <p><b>Still no account?  Sign up !</b></p>
           <button class="ui orange labeled submit icon button"  type="submit" href="/signup" onClick='document.location.href="/signup"'>
             <i class="edit outline icon"></i>Create an account
           </button>
         </center>
       </div>
+      
   </body>
 </html>

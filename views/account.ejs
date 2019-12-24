@@ -1,41 +1,72 @@
 <!--ACCOUNT PAGE LAYOUT-->
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <% include partials/head %>
-      <title>Account</title>
-        <link rel="stylesheet" href="/assets/semantic/semantic.min.css">
-        <style>
-        .main.container{
-            margin-top: 7em;
-            width: 50%;
-        }
-        .btn-danger{
-          position: absolute;
-          right: 0px;
-          padding: 9px;
-        }
-        </style>
+    <meta charset="utf-8">
+    <title>Account</title>
+
+    <!-- D3.js CDN source -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- Semantic UI usage-->
+    <link rel="stylesheet" href="/assets/semantic/semantic.min.css">
+    <!-- CSS stylesheet -->
+    <style>
+    .main.container{
+        margin-top: 7em;
+        width: 50%;
+    }
+    .btn-danger{
+      position: absolute;
+      right: 0px;
+      padding: 9px;
+    }
+    
+    body{
+      background-color: white;
+      margin-left: 40%;
+    }
+    div.bar{
+      display: inline-block;
+      width: 20px;
+      background-color:brown;
+      margin-right: 5px;
+    }
+    </style>
   </head>
+  <!--Header-->
   <body class="main container">
     <div class="ui fixed inverted menu">
-      <a href="/" class="header item">Home</a>
+      <!--Logout Button-->
       <button class="btn btn-danger" href="/" onClick='document.location.href="/"'>
         Logout
       </button>
     </div>
     <br/>
+  <!--Body-->
     <center>
-    <cent    </center class="col-md-6 col-md-offset-3">
-      <h1>Hello <%= name %></h1>
-      <button class="btn btn-success" id="show-metrics">
-        Bring the metrics
-      </button>
-      <div id="metrics"></div>
+    <h1>Hello <%= data.name %></h1>
+    </br>
+    <!--Display metrics-->
+    <h2>Your metrics<br/> </h2>
+      <table> 
+        <tr>
+            <th>Timestamp </th>
+            <th>Value</th>
+        </tr>
+        <% data.metrics.forEach((item)=>{%> 
+        <tr>
+            <td><%=item.timestamp%>  </td>
+            <td><%=item.value%></td>
+        </tr></li>  
+        <%});%> 
+    </table> 
 
+    <!--Add a new metric-->
     <div id="form" class="ui main container">
         <h2>Add a new metric</h2>
-        <form action="/metrics/:id" method="post" class="ui form">
+        <form action='/metric' method="post" class="ui form">
           <br/>
           <div class="form-group">
             <label for="form_timestamp"><b>Timestamp</b></label>
@@ -47,24 +78,15 @@
             <input id="form_value" type="number" name="value" />
           </div>
           <br/>
-          <button class="ui orange labeled submit icon button" type="submit" name="Add" value="Add">
+          <button class="ui green labeled submit icon button" type="submit" name="Submit" value="Add">
               <i class="edit outline icon"></i>Add 
           </button>
         </form>
-
+        </br>
+        </br>
       </div>
+      </br>
     </center>
 
-    <script>
-      $('#show-metrics').click((e) => {
-        e.preventDefault();
-        $.getJSON("/metrics.json", {}, (data) => {
-          const content = data.map(d => {
-            return 'timestamp: '+d.timestamp+', value: '+d.value+'';
-          })
-          $('#metrics').append(content.join("\n"));
-        });
-      })
-    </script>
   </body>
 </html>

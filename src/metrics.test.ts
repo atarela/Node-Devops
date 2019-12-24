@@ -20,13 +20,15 @@ describe('Metrics', function () {
 
   describe('Metrics', function () {
     it('should save and get', function () {
-      expect(a).to.equal(0)
+      dbMet.get("0", function (err: Error | null, result?: Metric[]) { 
+        //expect(a).to.equal(0)
+      })
     })
   })
 
   //Test db#get
-  describe('#get', function () {
-    it('should get empty array on non existing group', function () {
+  describe('#GetMetric', function () {
+    it('should get empty array', function () {
       //the test of 'get'
       dbMet.get("0", function (err: Error | null, result?: Metric[]) { //0 is a value that we put into database
         expect(err).to.be.null
@@ -41,7 +43,7 @@ describe('Metrics', function () {
     it('should get empty array on non existing group', function (done) {
       //the test of 'get'
       setTimeout( () =>{
-        dbMet.get("0", function (err: Error | null, result?: Metric[]) { //0 is a value that we put into database
+        dbMet.get("0", function (err: Error | null, result?: Metric[]) { 
           expect(err).to.be.null
           expect(result).to.not.be.undefined
           expect(result).to.be.empty

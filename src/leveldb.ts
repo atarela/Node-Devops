@@ -1,3 +1,4 @@
+//Importation necessary for the connection to database
 import encoding from 'encoding-down'
 import leveldown from 'leveldown'
 import levelup from 'levelup'

@@ -67,7 +67,7 @@
     "noImplicitAny": false
   },
   "include": [
-    "src/**/*"
+    "src/**/*", "views/metricsgraph.js"
   ],
   "exclude": [
       "node_modules",

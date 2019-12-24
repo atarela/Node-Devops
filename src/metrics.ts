@@ -1,27 +1,35 @@
 import {LevelDB} from './leveldb'
 import WriteStream from 'level-ws'
+var d3 = require("d3")
 
+//Class Metric to create a metric
 export class Metric {
+  public username: string
   public timestamp: string
   public value: number
 
-  constructor(ts: string, v: number) {
+  constructor(username: string, ts: string, v: number) {
+    this.username = username
     this.timestamp = ts
     this.value = v
   }
 }
 
+//Class to handle a metric
 export class MetricsHandler {
   private db: any 
 
+  //connect to database
   constructor(dbPath: string) {
     this.db = LevelDB.open(dbPath)
   }
 
+  //close connection to database
   public closeDB(){
     this.db.close();
   }
 
+  //Add a metric in database
   public save(key: number, metrics: Metric[], callback: (error: Error | null) => void) {
     const stream = WriteStream(this.db)
     stream.on('error', callback)
@@ -32,19 +40,20 @@ export class MetricsHandler {
     stream.end()
   }
 
-  //get functions
+  //Get a metric
   public get(key: string, callback: (err: Error | null, result?: Metric[]) => void) {
     const stream = this.db.createReadStream()
     var met: Metric[] = []
     
     stream.on('error', callback)
       .on('data', (data: any) => {
+        const username = data.username
         const [_, k, timestamp] = data.key.split(":")
         const value = data.value
         if (key != k) {
           console.log(`LevelDB error: ${data} does not match key ${key}`)
         } else {
-          met.push(new Metric(timestamp, value))
+          met.push(new Metric(username, timestamp, value))
         }
       })
       .on('end', (err: Error) => {
@@ -52,6 +61,7 @@ export class MetricsHandler {
       })
   }
 
+  //Get all metrics
   public getAll(
     callback: (error: Error | null, result: any | null) => void 
    ) {
@@ -62,7 +72,7 @@ export class MetricsHandler {
       .on('data', function (data) {
         //we split our key with ':'
         let timestamp: string = data.key.split(':')[2]   //we take ALL
-        let metric: Metric = new Metric(timestamp, data.value)
+        let metric: Metric = new Metric(data.username, timestamp, data.value)
         //console.log(data.key, '=', data.value)
         metrics.push(metric)
         //callback(null, data)
@@ -80,7 +90,7 @@ export class MetricsHandler {
       })
     }
 
-    //get function
+  //Get one metric
   public getOne(
     callback: (error: Error | null, result: any | null) => void 
    ) {
@@ -91,7 +101,7 @@ export class MetricsHandler {
       .on('data', function (data) {
         //we split our key with ':'
         let timestamp: string = data.key.split(':')[1]   //we take ONE
-        let metric: Metric = new Metric(timestamp, data.value)
+        let metric: Metric = new Metric(data.username, timestamp, data.value)
         //console.log(data.key, '=', data.value)
         metrics.push(metric)
         //callback(null, data)
@@ -108,25 +118,40 @@ export class MetricsHandler {
         console.log('Stream ended')
       })
     }
-  
-  //delete function (A RETOUCHE POUR QUE CA SUPPRIME)
-    //use method from levelDB called del(to delete for that search del function on inet)
-    public delete(key: string, callback: (err: Error | null, result?: Metric[]) => void) {
-      const stream = this.db.createReadStream()
-      var met: Metric[] = []
-      
+
+    //Delete a specific metric
+    public delete(key: string, metrics: Metric[], callback: (error: Error | null, result: any | null) => void) {
+      const stream = WriteStream(this.db)
       stream.on('error', callback)
-        .on('data', (data: any) => {
-          const [_, k, timestamp] = data.key.split(":")
-          const value = data.value
-          if (key != k) {
-            console.log(`LevelDB error: ${data} does not match key ${key}`)
-          } else {
-            met.push(new Metric(timestamp, value))
-          }
-        })
-        .on('end', (err: Error) => {
-          callback(null, met)
-        })
+      stream.on('close', callback)
+      var position: number = 0
+      metrics.forEach((m: Metric) => {
+        if(m.timestamp === key) {
+          metrics.splice(position, 1)
+        }
+        position++
+      })
+      //stream.write(metrics)
+      stream.end()
+    }
+
+    //Display metrics on histogram
+    public histogram(key: number, metrics: Metric[], callback: (error: Error | null) => void) {
+      const stream = WriteStream(this.db)
+      stream.on('error', callback)
+      stream.on('close', callback)
+      var chartdata=[];
+      metrics.forEach((m: Metric) => {
+        //chartdata.push(m.timestamp)
+      })
+      d3.select("body").selectAll("div")
+        .data(metrics)
+        .enter()
+        .append("div")
+        .attr("class", "bar")
+        .style("height", function(d){
+            return d + "px"
+      });
+      stream.end()
     }
 }

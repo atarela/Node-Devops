@@ -6,7 +6,6 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha -r ts-node/register src/**/*.test.ts",
     "start": "./node_modules/.bin/ts-node src/server.ts",
-    "hash": "./node_modules/.bin/ts-node src/testHash.ts",
     "build": "./node_modules/.bin/tsc -p tsconfig.json",
     "dev": "./node_modules/.bin/nodemon "
   },
@@ -14,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "d3": "^5.14.2",
     "del": "^5.1.0",
     "ejs": "^2.7.4",
     "encoding-down": "^6.3.0",
