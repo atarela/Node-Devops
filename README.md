@@ -3,11 +3,11 @@
 ## Introduction 
 
 In this project we are asked to use DevOps tools such as:
-    1. Git, Branches and Tags
-    2. Testing Framework (We have used Chai)
-    3.Configuration with CI server
-    4.Provide a README file
-    5. MIT Licence
+    * Git, Branches and Tags
+    * Testing Framework (We have used Chai)
+    * Configuration with CI server
+    * Provide a README file
+    * MIT Licence
 
 ## Installation
 
